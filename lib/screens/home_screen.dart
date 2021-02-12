@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:random_jokes/screens/splash_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:connectivity/connectivity.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -11,10 +13,10 @@ class _HomeState extends State<Home> {
   String jokeType = 'Any';
 
   Future getJoke() async {
+    _checkConnectivity();
     var url = 'https://v2.jokeapi.dev/joke/$jokeType?format=txt';
     var response = await http.get(url);
     if (response.statusCode == 200) {
-      print(response.body);
       if (joke == null) {
         setState(() {
           joke = response.body;
@@ -23,14 +25,51 @@ class _HomeState extends State<Home> {
     }
   }
 
+  _showDialogue(title, text) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(text),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (ctx) => SplashScreen()));
+                },
+                child: Text('Close'),
+              ),
+            ],
+          );
+        });
+  }
+
   String joke = 'Joke Here...';
   String appBarTitle = 'Lame Jokes';
+
+  _checkConnectivity() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      _showDialogue(
+          'No Internet', 'Please check your internet connectivity...');
+    } else if (connectivityResult == ConnectivityResult.wifi ||
+        connectivityResult == ConnectivityResult.mobile) {}
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _checkConnectivity();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[900],
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         centerTitle: true,
         title: Text(
           appBarTitle,

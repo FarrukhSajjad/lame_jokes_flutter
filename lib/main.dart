@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:random_jokes/screens/home_screen.dart';
+import 'package:random_jokes/screens/splash_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Lame Jokes',
       theme: ThemeData(),
-      home: Home(),
+      home: SplashScreen(),
     );
   }
 }
