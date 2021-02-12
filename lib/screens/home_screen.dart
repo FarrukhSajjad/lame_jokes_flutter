@@ -43,7 +43,7 @@ class _HomeState extends State<Home> {
               Icons.star_border_outlined,
             ),
             onPressed: () {
-              launch('https://github.com/FarrukhSajjad');
+              launch('https://github.com/FarrukhSajjad/lame_jokes_flutter');
             },
           ),
         ],
